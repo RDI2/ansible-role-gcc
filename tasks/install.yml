@@ -1,0 +1,23 @@
+---
+# tasks file for gcc/install
+
+- name: make build directory
+  file: path={{ gcc_prefix }} state=directory
+
+- name: download gcc tarball
+  get_url: url={{ gcc_url }} dest=/tmp/gcc-{{ gcc_version }}.tar.bz2
+
+- name: unarchive gcc tarball
+  unarchive: copy=no src=/tmp/gcc-{{ gcc_version }}.tar.bz2 dest=/tmp creates=/tmp/gcc-{{ gcc_version }}
+
+- name: download prerequisites
+  shell: ./contrib/download_prerequisites
+  args:
+    chdir: /tmp/gcc-{{ gcc_version }}
+    creates: /tmp/gcc-{{ gcc_version }}/gmp-4.3.2.tar.bz2
+
+- name: install gcc
+  shell: ./configure --prefix={{ gcc_prefix }} --disable-multilib && make && make install
+  args:
+    chdir: /tmp/gcc-{{ gcc_version }}
+    creates: "{{ gcc_prefix }}/bin"

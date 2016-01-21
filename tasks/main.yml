@@ -1,0 +1,19 @@
+---
+# tasks file for gcc/main
+
+- name: install epel release
+  yum: name=epel-release state=present
+
+- name: install required packages
+  yum: name={{ item }} state=present
+  with_items:
+    - gcc
+    - gcc-c++
+
+- name: check if already installed
+  stat: path={{ gcc_prefix }}/bin
+  register: gcc_bin_dir
+  changed_when: gcc_bin_dir.stat.exists == False
+
+- include: install.yml
+  when: gcc_bin_dir.stat.exists == False
