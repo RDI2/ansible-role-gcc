@@ -17,7 +17,7 @@
     creates: /tmp/gcc-{{ gcc_version }}/gmp-4.3.2.tar.bz2
 
 - name: install gcc
-  shell: ./configure --prefix={{ gcc_prefix }} --disable-multilib && make && make install
+  shell: ./configure --prefix={{ gcc_prefix }} --disable-multilib && make -j {{ gcc_make_jobs }} && make install
   args:
     chdir: /tmp/gcc-{{ gcc_version }}
     creates: "{{ gcc_prefix }}/bin"
