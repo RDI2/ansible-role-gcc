@@ -9,6 +9,8 @@
   with_items:
     - gcc
     - gcc-c++
+    - zip
+    - tar
 
 - name: check if already installed
   stat: path={{ gcc_prefix }}/bin
